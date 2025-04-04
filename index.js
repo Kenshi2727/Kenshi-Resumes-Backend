@@ -43,7 +43,16 @@ app.get('/api/user-resumes', (req, res) => {
 
 });
 
-app.put('/user-resumes/', (req, res) => {
+app.put('/api/user-resumes/:id', async (req, res) => {
     console.log(req.body);
+    console.log(req.params);
+
+    try {
+        const data = req.body.data;
+        await db.query('UPDATE resume SET firstname= $1, lastname = $2, jobtitle = $3, address = $4, phone = $5, email=$6 WHERE resumeid = $7', [data.firstName, data.lastName, data.jobTitle, data.address, data.phone, data.email, req.params.id]);
+    } catch (error) {
+        console.log("Database insertion error----->", error);
+    }
+    res.send(req.body);
 });
 app.listen(port, () => console.log(`Server is running on port ${port}`));
