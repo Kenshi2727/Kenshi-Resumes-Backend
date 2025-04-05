@@ -38,9 +38,32 @@ app.post('/api/user-resumes', async (req, res) => {
 
 });
 
-app.get('/api/user-resumes', (req, res) => {
+app.get('/api/user-resumes', async (req, res) => {
     console.log("get request--->", req.query);
-
+    const userEmail = req.query.userEmail;
+    try {
+        const result = await db.query('SELECT * FROM resume WHERE useremail = $1', [userEmail]);
+        console.log(result.rows[0]);
+        const dataItem = result.rows[0];
+        const data = {
+            data: [{
+                title: dataItem.title,
+                userEmail: dataItem.useremail,
+                userName: dataItem.username,
+                firstName: dataItem.firstname,
+                lastName: dataItem.lastname,
+                jobTitle: dataItem.jobtitle,
+                address: dataItem.address,
+                phone: dataItem.phone,
+                email: dataItem.email,
+                documentId: dataItem.resumeid,
+            }]
+        }
+        res.json(data);
+    } catch (error) {
+        console.log("Database fetching error----->", error);
+        res.status(500).send("Error fetching data from database");
+    }
 });
 
 app.put('/api/user-resumes/:id', async (req, res) => {
