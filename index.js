@@ -29,7 +29,7 @@ app.post('/api/user-resumes', async (req, res) => {
     }
     try {
         const data = req.body.data;
-        await db.query('INSERT INTO resume (title,resumeid,useremail,username) VALUES ($1, $2, $3, $4)', [data.title, data.resumeId, data.userEmail, data.userName]);
+        await db.query('INSERT INTO resume (title,"documentId","userEmail","userName") VALUES ($1, $2, $3, $4)', [data.title, data.documentId, data.userEmail, data.userName]);
     } catch (error) {
         console.log("Database insertion error----->", error);
     }
@@ -42,22 +42,11 @@ app.get('/api/user-resumes', async (req, res) => {
     console.log("get request--->", req.query);
     const userEmail = req.query.userEmail;
     try {
-        const result = await db.query('SELECT * FROM resume WHERE useremail = $1', [userEmail]);
-        console.log(result.rows[0]);
+        const result = await db.query('SELECT * FROM resume WHERE "userEmail" = $1', [userEmail]);
+        console.log(result.rows);
         const dataItem = result.rows[0];
         const data = {
-            data: [{
-                title: dataItem.title,
-                userEmail: dataItem.useremail,
-                userName: dataItem.username,
-                firstName: dataItem.firstname,
-                lastName: dataItem.lastname,
-                jobTitle: dataItem.jobtitle,
-                address: dataItem.address,
-                phone: dataItem.phone,
-                email: dataItem.email,
-                documentId: dataItem.resumeid,
-            }]
+            data: result.rows
         }
         res.json(data);
     } catch (error) {
@@ -72,7 +61,7 @@ app.put('/api/user-resumes/:id', async (req, res) => {
 
     try {
         const data = req.body.data;
-        await db.query('UPDATE resume SET firstname= $1, lastname = $2, jobtitle = $3, address = $4, phone = $5, email=$6 WHERE resumeid = $7', [data.firstName, data.lastName, data.jobTitle, data.address, data.phone, data.email, req.params.id]);
+        await db.query('UPDATE resume SET "firstName"= $1, "lastName" = $2, "jobTitle" = $3, address = $4, phone = $5, email=$6 WHERE "documentId" = $7', [data.firstName, data.lastName, data.jobTitle, data.address, data.phone, data.email, req.params.id]);
     } catch (error) {
         console.log("Database insertion error----->", error);
     }
