@@ -43,7 +43,7 @@ app.get('/api/user-resumes', async (req, res) => {
     const userEmail = req.query.userEmail;
     try {
         const result = await db.query('SELECT * FROM resume WHERE "userEmail" = $1', [userEmail]);
-        console.log(result.rows);
+        // console.log(result.rows);
         const dataItem = result.rows[0];
         const data = {
             data: result.rows
@@ -55,13 +55,46 @@ app.get('/api/user-resumes', async (req, res) => {
     }
 });
 
+app.get('/api/user-resumes/:id', async (req, res) => {
+    console.log("populate--->", req.query);
+    if (req.query.populate && req.query.populate === "*") {
+        const documentId = req.params.id;
+        console.log("documentId----->", req.params);
+        try {
+            const result = await db.query('SELECT * FROM resume WHERE "documentId" = $1', [documentId]);
+            console.log('response---->', result.rows);
+            const data = {
+                data: result.rows[0]
+            }
+            res.json(data);
+        } catch (error) {
+            console.log("Database fetching error----->", error);
+            res.status(500).send("Error fetching data from database");
+        }
+    }
+    else {
+        res.status(500).send("No populate query found");
+    }
+});
+
+
 app.put('/api/user-resumes/:id', async (req, res) => {
     console.log(req.body);
     console.log(req.params);
 
     try {
         const data = req.body.data;
-        await db.query('UPDATE resume SET "firstName"= $1, "lastName" = $2, "jobTitle" = $3, address = $4, phone = $5, email=$6 WHERE "documentId" = $7', [data.firstName, data.lastName, data.jobTitle, data.address, data.phone, data.email, req.params.id]);
+        const section = req.body.section;
+        if (section === "summery") {
+            console.log("summery data received----->", data.summery)
+            await db.query('UPDATE resume SET "summery"= $1 WHERE "documentId" = $2', [data.summery, req.params.id]);
+        }
+        else if (section === "personalDetails") {
+            await db.query('UPDATE resume SET "firstName"= $1, "lastName" = $2, "jobTitle" = $3, address = $4, phone = $5, email=$6 WHERE "documentId" = $7', [data.firstName, data.lastName, data.jobTitle, data.address, data.phone, data.email, req.params.id]);
+        }
+        else if (section === "experience") {
+            console.log("education data received----->", data.Experience);
+        }
     } catch (error) {
         console.log("Database insertion error----->", error);
     }
