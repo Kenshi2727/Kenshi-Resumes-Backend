@@ -17,9 +17,14 @@ CREATE TABLE resume (
     "themeColor" TEXT
 );
 
+
 ALTER TABLE skills
-ADD COLUMN name TEXT,
-ADD COLUMN rating NUMERIC;
+ALTER COLUMN name SET DATA TYPE TEXT[] USING ARRAY[name],
+ALTER COLUMN rating SET DATA TYPE NUMERIC[] USING ARRAY[rating];
+
+-- ALTER TABLE skills
+-- ADD COLUMN name TEXT,
+-- ADD COLUMN rating NUMERIC;
 
 ALTER TABLE experience
 ALTER COLUMN title SET DATA TYPE TEXT[] USING ARRAY[title],
@@ -42,9 +47,18 @@ ALTER COLUMN "workSummery" SET DATA TYPE TEXT[] USING ARRAY["workSummery"];
 -- ADD COLUMN "documntId" TEXT,
 
 ALTER TABLE education
-ADD COLUMN university TEXT,
-ADD COLUMN degree TEXT,
-ADD COLUMN major TEXT,
-ADD COLUMN "startDate" DATE,
-ADD COLUMN "endDate" DATE,
-ADD COLUMN description TEXT;
+ALTER COLUMN university SET DATA TYPE TEXT[] USING ARRAY[university],
+ALTER COLUMN degree SET DATA TYPE TEXT[] USING ARRAY[degree],
+ALTER COLUMN major SET DATA TYPE TEXT[] USING ARRAY[major],
+ALTER COLUMN "startDate" SET DATA TYPE DATE[] USING ARRAY["startDate"],
+ALTER COLUMN "endDate" SET DATA TYPE DATE[] USING ARRAY["endDate"],
+ALTER COLUMN description SET DATA TYPE TEXT[] USING ARRAY[description];
+
+
+-- ALTER TABLE education
+-- ADD COLUMN university TEXT,
+-- ADD COLUMN degree TEXT,
+-- ADD COLUMN major TEXT,
+-- ADD COLUMN "startDate" DATE,
+-- ADD COLUMN "endDate" DATE,
+-- ADD COLUMN description TEXT;

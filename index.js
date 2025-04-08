@@ -63,8 +63,67 @@ app.get('/api/user-resumes/:id', async (req, res) => {
         try {
             const result = await db.query('SELECT * FROM resume WHERE "documentId" = $1', [documentId]);
             console.log('response---->', result.rows);
+            let resData = result.rows[0];
+
+            const exp = await db.query('SELECT * FROM experience WHERE "documentId" = $1', [documentId]);
+            console.log('experience response---->', exp.rows);
+
+            let jsonData = [];
+            if (exp.rows.length > 0) {
+                for (let i = 0; i < exp.rows[0].title.length; i++) {
+                    jsonData.push({
+                        title: exp.rows[0].title[i],
+                        companyName: exp.rows[0].companyName[i],
+                        city: exp.rows[0].city[i],
+                        state: exp.rows[0].state[i],
+                        startDate: exp.rows[0].startDate[i],
+                        endDate: exp.rows[0].endDate[i],
+                        workSummery: exp.rows[0].workSummery[i]
+                    });
+                }
+            }
+
+            console.log("jsonData----->", jsonData);
+
+            let jsonEduData = [];
+            const edu = await db.query('SELECT * FROM education WHERE "documentId" = $1', [documentId]);
+            console.log('education response----->', edu.rows);
+            if (edu.rows.length > 0) {
+                for (let i = 0; i < edu.rows[0].degree.length; i++) {
+                    jsonEduData.push({
+                        degree: edu.rows[0].degree[i],
+                        university: edu.rows[0].university[i],
+                        major: edu.rows[0].major[i],
+                        startDate: edu.rows[0].startDate[i],
+                        endDate: edu.rows[0].endDate[i],
+                        description: edu.rows[0].description[i]
+                    });
+                }
+            }
+
+            let jsonSkillsData = [];
+            const skills = await db.query('SELECT * FROM skills WHERE "documentId" = $1', [documentId]);
+            console.log('skills response----->', skills.rows);
+
+            if (skills.rows.length > 0) {
+                for (let i = 0; i < skills.rows[0].rating.length; i++) {
+                    jsonSkillsData.push(
+                        {
+                            name: skills.rows[0].name[i],
+                            rating: skills.rows[0].rating[i],
+                        }
+                    );
+                }
+            }
+
+            resData = {
+                ...resData,
+                Experience: jsonData,
+                education: jsonEduData,
+                skills: jsonSkillsData
+            }
             const data = {
-                data: result.rows[0]
+                data: resData
             }
             res.json(data);
         } catch (error) {
@@ -159,6 +218,112 @@ app.put('/api/user-resumes/:id', async (req, res) => {
                     req.params.id
                 ]);
 
+            }
+        }
+        else if (section === "education") {
+            console.log("education data received----->", data.education);
+            const eduData = data.education;
+            // Extract values into arrays
+            const degrees = eduData.map(item => item.degree);
+            const universities = eduData.map(item => item.university);
+            const majors = eduData.map(item => item.major);
+            const startDates = eduData.map(item => item.startDate);
+            const endDates = eduData.map(item => item.endDate);
+            const descriptions = eduData.map(item => item.description);
+
+            const check = await db.query('SELECT * FROM education WHERE "documentId" = $1', [req.params.id]);
+            if (check.rows.length > 0) {
+                //upate the data
+                await db.query(`
+                    UPDATE education
+                    SET
+                      degree = $1,
+                      university = $2,
+                      major = $3,
+                      "startDate" = $4,
+                      "endDate" = $5,
+                      description = $6
+                    WHERE "documentId" = $7;
+                  `, [
+                    degrees,
+                    universities,
+                    majors,
+                    startDates,
+                    endDates,
+                    descriptions,
+                    req.params.id
+                ]);
+            }
+            else {
+                //insert the data
+
+                await db.query(`
+                    INSERT INTO education ("documentId")
+                    VALUES ($1)
+                    `, [req.params.id]);
+
+                await db.query(`
+                        UPDATE education
+                        SET
+                          degree = $1,
+                          university = $2,
+                          major = $3,
+                          "startDate" = $4,
+                          "endDate" = $5,
+                          description = $6
+                        WHERE "documentId" = $7;
+                      `, [
+                    degrees,
+                    universities,
+                    majors,
+                    startDates,
+                    endDates,
+                    descriptions,
+                    req.params.id
+                ]);
+            }
+        }
+        else if (section === "skills") {
+            console.log("skills data received----->", data.skills);
+            const skillsData = data.skills;
+            // Extract values into arrays
+            const names = skillsData.map(item => item.name);
+            const ratings = skillsData.map(item => item.rating);
+
+            const check = await db.query('SELECT * FROM skills WHERE "documentId" = $1', [req.params.id]);
+            if (check.rows.length > 0) {
+                //upate the data
+                await db.query(`
+                    UPDATE skills
+                    SET
+                      name = $1,
+                      rating = $2
+                    WHERE "documentId" = $3;
+                  `, [
+                    names,
+                    ratings,
+                    req.params.id
+                ]);
+            }
+            else {
+                //insert the data
+
+                await db.query(`
+                    INSERT INTO skills ("documentId")
+                    VALUES ($1)
+                    `, [req.params.id]);
+
+                await db.query(`
+                        UPDATE skills
+                        SET
+                          name = $1,
+                          rating = $2
+                        WHERE "documentId" = $3;
+                      `, [
+                    names,
+                    ratings,
+                    req.params.id
+                ]);
             }
         }
     } catch (error) {
