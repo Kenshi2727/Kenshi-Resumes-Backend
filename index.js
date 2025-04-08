@@ -93,7 +93,73 @@ app.put('/api/user-resumes/:id', async (req, res) => {
             await db.query('UPDATE resume SET "firstName"= $1, "lastName" = $2, "jobTitle" = $3, address = $4, phone = $5, email=$6 WHERE "documentId" = $7', [data.firstName, data.lastName, data.jobTitle, data.address, data.phone, data.email, req.params.id]);
         }
         else if (section === "experience") {
-            console.log("education data received----->", data.Experience);
+            console.log("experience data received----->", data.Experience);
+            const expData = data.Experience;
+            // Extract values into arrays
+            const titles = expData.map(item => item.title);
+            const companyNames = expData.map(item => item.companyName);
+            const cities = expData.map(item => item.city);
+            const states = expData.map(item => item.state);
+            const startDates = expData.map(item => item.startDate);
+            const endDates = expData.map(item => item.endDate);
+            const summaries = expData.map(item => item.workSummery);
+
+            const check = await db.query('SELECT * FROM experience WHERE "documentId" = $1', [req.params.id]);
+            if (check.rows.length > 0) {
+                //upate the data
+                await db.query(`
+                    UPDATE experience
+                    SET
+                      title = $1,
+                      "companyName" = $2,
+                      city = $3,
+                      state = $4,
+                      "startDate" = $5,
+                      "endDate" = $6,
+                      "workSummery" = $7
+                    WHERE "documentId" = $8;
+                  `, [
+                    titles,
+                    companyNames,
+                    cities,
+                    states,
+                    startDates,
+                    endDates,
+                    summaries,
+                    req.params.id
+                ]);
+            }
+            else {
+                //insert the data
+
+                await db.query(`
+                    INSERT INTO experience ("documentId")
+                    VALUES ($1)
+                    `, [req.params.id]);
+
+                await db.query(`
+                        UPDATE experience
+                        SET
+                          title = $1,
+                          "companyName" = $2,
+                          city = $3,
+                          state = $4,
+                          "startDate" = $5,
+                          "endDate" = $6,
+                          "workSummery" = $7
+                        WHERE "documentId" = $8;
+                      `, [
+                    titles,
+                    companyNames,
+                    cities,
+                    states,
+                    startDates,
+                    endDates,
+                    summaries,
+                    req.params.id
+                ]);
+
+            }
         }
     } catch (error) {
         console.log("Database insertion error----->", error);
