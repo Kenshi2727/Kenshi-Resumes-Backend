@@ -3,15 +3,17 @@ import bodyParser from 'body-parser';
 import axios from 'axios';
 import cors from 'cors';
 import pg from 'pg';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const port = 3000;
 const app = express();
 const db = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: "user_resume",
-    password: "spiralhelix27",
-    port: 5433,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 })
 db.connect();
 
@@ -336,4 +338,10 @@ app.put('/api/user-resumes/:id', async (req, res) => {
     }
     res.send(req.body);
 });
+
+app.delete('/api/user-resumes/:id', async (req, res) => {
+    console.log("Delete docuemnt id----->", req.params.id);
+
+});
+
 app.listen(port, () => console.log(`Server is running on port ${port}`));
