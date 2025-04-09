@@ -326,6 +326,11 @@ app.put('/api/user-resumes/:id', async (req, res) => {
                 ]);
             }
         }
+        else {
+            //theemcolor data
+            console.log("theme color data received----->", data.themeColor);
+            await db.query('UPDATE resume SET "themeColor"= $1 WHERE "documentId" = $2', [data.themeColor, req.params.id]);
+        }
     } catch (error) {
         console.log("Database insertion error----->", error);
     }
