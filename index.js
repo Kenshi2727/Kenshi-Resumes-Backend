@@ -341,7 +341,16 @@ app.put('/api/user-resumes/:id', async (req, res) => {
 
 app.delete('/api/user-resumes/:id', async (req, res) => {
     console.log("Delete docuemnt id----->", req.params.id);
-
+    try {
+        await db.query('DELETE FROM resume WHERE "documentId" = $1', [req.params.id]);
+        await db.query('DELETE FROM experience WHERE "documentId" = $1', [req.params.id]);
+        await db.query('DELETE FROM education WHERE "documentId" = $1', [req.params.id]);
+        await db.query('DELETE FROM skills WHERE "documentId" = $1', [req.params.id]);
+        res.send("Document deleted successfully with id " + req.params.id);
+    } catch (error) {
+        console.log("Database deletion error----->", error);
+        res.status(500).send("Error deleting data from database");
+    }
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
