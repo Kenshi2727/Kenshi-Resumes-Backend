@@ -1,12 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
+import multer from 'multer';
 import cors from 'cors';
 import pg from 'pg';
 import './bot.js'
 import dotenv from 'dotenv';
 dotenv.config();
 
+const upload = multer({ dest: 'uploads/' });
 const port = 3000;
 const app = express();
 const db = new pg.Client({
@@ -352,6 +354,12 @@ app.delete('/api/user-resumes/:id', async (req, res) => {
         console.log("Database deletion error----->", error);
         res.status(500).send("Error deleting data from database");
     }
+});
+
+app.post('/api/user-resumes/upload/:id', upload.single('files'), async (req, res) => {
+    console.log("Pdf post request----->", req.body);
+    console.log("Pdf file----->", req.file);
+
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
