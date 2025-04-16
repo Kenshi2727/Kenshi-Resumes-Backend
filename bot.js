@@ -25,24 +25,29 @@ bot.onText(/\greet/, (msg, match) => {
 });
 
 //sending docuemnts
-bot.onText(/\/sendpdf/, (msg) => {
+bot.onText(/\/sendpdf (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
     // const pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // Replace with your PDF URL
     // const pdfUrl = 'uploads\\2cd8a544ce05cf1b9bc6d178a234e098';
     const pdfUrl = sharedData.path;
-    console.log("received path--->", sharedData.path);
+    console.log("received data--->", sharedData);
+    const resp = match[1];
+    if (resp === sharedData.id) {
 
+        bot.sendDocument(chatId, pdfUrl, {
+            caption: 'Here is your PDF file!',
 
-    bot.sendDocument(chatId, pdfUrl, {
-        caption: 'Here is your PDF file!',
-
-    }, {
-        filename: 'resume.pdf',
-        contentType: 'application/pdf',
-    }).catch((error) => {
-        console.error('Error sending document:', error);
-        bot.sendMessage(chatId, 'Sorry, there was an error sending the PDF.');
-    });
+        }, {
+            filename: 'resume.pdf',
+            contentType: 'application/pdf',
+        }).catch((error) => {
+            console.error('Error sending document:', error);
+            bot.sendMessage(chatId, 'Sorry, there was an error sending the PDF.');
+        });
+    }
+    else {
+        bot.sendMessage(chatId, 'Sorry, you are not authorized to access this document.');
+    }
 });
 
 
