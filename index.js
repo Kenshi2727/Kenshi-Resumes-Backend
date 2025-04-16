@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import axios from 'axios';
 import cors from 'cors';
 import pg from 'pg';
+import './bot.js'
 import dotenv from 'dotenv';
 dotenv.config();
 

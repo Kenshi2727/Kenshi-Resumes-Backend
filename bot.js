@@ -10,7 +10,8 @@ const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
 // Matches "/echo [whatever]"
-bot.onText(/\/echo (.+)/, (msg, match) => {
+// bot.onText(/\/echo (.+)/, (msg, match) => {
+bot.onText(/\greet/, (msg, match) => {
     // 'msg' is the received Message from Telegram
     // 'match' is the result of executing the regexp above on the text content
     // of the message
@@ -19,7 +20,7 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
     const resp = match[1]; // the captured "whatever"
 
     // send back the matched "whatever" to the chat
-    bot.sendMessage(chatId, resp);
+    bot.sendMessage(chatId, "Hello, I am your bot! How can I assist you today?\nAnswered to:" + resp);
 });
 
 //sending docuemnts
@@ -40,6 +41,7 @@ bot.onText(/\/sendpdf/, (msg) => {
 // messages.
 bot.on('message', (msg) => {
     const chatId = msg.chat.id;
+    console.log("Response from user", msg);
 
     // send a message to the chat acknowledging receipt of their message
     bot.sendMessage(chatId, 'Hello,Kenshin Commander reporting! Have a pathetic day baby!');
