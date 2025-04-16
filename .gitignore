@@ -73,7 +73,7 @@ web_modules/
 .yarn-integrity
 
 #uploads from multer
-.uploads
+uploads
 
 # dotenv environment variable files
 .env
