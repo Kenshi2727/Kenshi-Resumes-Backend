@@ -359,7 +359,10 @@ app.delete('/api/user-resumes/:id', async (req, res) => {
 app.post('/api/user-resumes/upload/:id', upload.single('files'), async (req, res) => {
     console.log("Pdf post request----->", req.body);
     console.log("Pdf file----->", req.file);
-
+    sharedData.path = req.file.path;
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
+export const sharedData = {
+    path: ''
+};

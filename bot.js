@@ -1,6 +1,7 @@
 // https://core.telegram.org/bots/api
 import TelegramBot from 'node-telegram-bot-api';
 import dotenv from 'dotenv';
+import { sharedData } from './index.js';
 dotenv.config();
 
 // replace the value below with the Telegram token you receive from @BotFather
@@ -26,10 +27,18 @@ bot.onText(/\greet/, (msg, match) => {
 //sending docuemnts
 bot.onText(/\/sendpdf/, (msg) => {
     const chatId = msg.chat.id;
-    const pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // Replace with your PDF URL
+    // const pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // Replace with your PDF URL
+    // const pdfUrl = 'uploads\\2cd8a544ce05cf1b9bc6d178a234e098';
+    const pdfUrl = sharedData.path;
+    console.log("received path--->", sharedData.path);
+
 
     bot.sendDocument(chatId, pdfUrl, {
         caption: 'Here is your PDF file!',
+
+    }, {
+        filename: 'resume.pdf',
+        contentType: 'application/pdf',
     }).catch((error) => {
         console.error('Error sending document:', error);
         bot.sendMessage(chatId, 'Sorry, there was an error sending the PDF.');
