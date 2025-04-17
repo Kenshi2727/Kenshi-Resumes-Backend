@@ -1,3 +1,39 @@
+
+/*
+Note that USING ARRAY[column_name] was used for mapping older values while converting the scalar values to array type.
+
+
+for construction of table with array data types you don't need it.
+
+Example--->
+
+CREATE TABLE education (
+    university TEXT[],
+    degree TEXT[],
+    major TEXT[],
+    "startDate" DATE[],
+    "endDate" DATE[],
+    description TEXT[]
+);
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CREATE TABLE resume (
     id SERIAL PRIMARY KEY,
     title TEXT,
