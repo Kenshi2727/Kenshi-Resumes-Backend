@@ -361,10 +361,12 @@ app.post('/api/user-resumes/upload/:id', upload.single('files'), async (req, res
     console.log("Pdf file----->", req.file);
     sharedData.path = req.file.path;
     sharedData.id = req.params.id;
+    sharedData.fileName = req.file.originalname;
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
 export const sharedData = {
     path: '',
+    fileName: null,
     id: null
 };

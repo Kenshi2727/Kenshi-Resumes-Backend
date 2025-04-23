@@ -38,7 +38,7 @@ bot.onText(/\/sendpdf (.+)/, (msg, match) => {
             caption: 'Here is your PDF file!',
 
         }, {
-            filename: 'resume.pdf',
+            filename: sharedData.fileName,
             contentType: 'application/pdf',
         }).catch((error) => {
             console.error('Error sending document:', error);
