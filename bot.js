@@ -35,7 +35,7 @@ bot.onText(/\/sendpdf (.+)/, (msg, match) => {
     if (resp === sharedData.id) {
 
         bot.sendDocument(chatId, pdfUrl, {
-            caption: 'Here is your PDF file!',
+            caption: 'Here is your AI-generated Resume!',
 
         }, {
             filename: sharedData.fileName,

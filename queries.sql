@@ -18,20 +18,11 @@ CREATE TABLE education (
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CREATE TABLE telegramusers (
+    id SERIAL PRIMARY KEY,
+    "documentId" TEXT,
+    "userName" TEXT ,
+);
 
 
 CREATE TABLE resume (
