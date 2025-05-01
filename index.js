@@ -8,7 +8,8 @@ import './bot.js'
 import dotenv from 'dotenv';
 dotenv.config();
 
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });//multer stores on device
+const upload = multer({ storage: multer.memoryStorage() });// multer stores in buffer
 const port = 3000;
 const app = express();
 const db = new pg.Client({
@@ -356,17 +357,26 @@ app.delete('/api/user-resumes/:id', async (req, res) => {
     }
 });
 
-app.post('/api/user-resumes/upload/:id', upload.single('files'), async (req, res) => {
+app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async (req, res) => {
     console.log("Pdf post request----->", req.body);
     console.log("Pdf file----->", req.file);
-    sharedData.path = req.file.path;
+    sharedData.buffer = req.file.buffer;
     sharedData.id = req.params.id;
     sharedData.fileName = req.file.originalname;
+    try {
+        await db.query(`INSERT INTO telegramusers("documentId","userName",pdf,"fileName") 
+                        VALUES($1,$2,$3,$4)
+                        `, [req.params.id, req.params.teleUser, req.file.buffer, req.file.originalname]);
+        res.send("File uploaded successfully with id " + req.params.id);
+    } catch (error) {
+        console.log("Database insertion error----->", error);
+    }
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
 export const sharedData = {
-    path: '',
+    buffer: null,
     fileName: null,
     id: null
 };
+export default db;
