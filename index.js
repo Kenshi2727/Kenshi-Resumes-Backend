@@ -5,7 +5,13 @@ import multer from 'multer';
 import cors from 'cors';
 import pg from 'pg';
 import './bot.js'
+import './flashAI.js'
+import './flashRecommendations.js'
+import { setBuffer, dataForAts } from './sharedData.js';
 import dotenv from 'dotenv';
+import fetchATS from './flashAI.js';
+import fetchRecommendations from './flashRecommendations.js';
+import { recommendations } from './flashRecommendations.js';
 dotenv.config();
 
 // const upload = multer({ dest: 'uploads/' });//multer stores on device
@@ -373,10 +379,43 @@ app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async
     }
 });
 
+app.post('/api/user-resumes/ats/:id', upload.single('files'), async (req, res) => {
+    console.log("file for ats----->", req.file);
+    setBuffer(req.file.buffer);
+    await fetchATS();
+    res.status(200).send("ATS score fetched successfully with id " + req.params.id);
+});
+
+app.get('/api/user-resumes/fetchScore/:id', async (req, res) => {
+    while (!dataForAts.fetched) {
+        console.log("Waiting for ATS score to be fetched...");
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for 3 second
+    }
+    console.log("ATS score fetched successfully----->", dataForAts.score);
+
+    res.status(200).json({
+        score: dataForAts.score,
+        fetched: dataForAts.fetched
+    });
+});
+
+app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
+    while (!dataForAts.fetched) {
+        console.log("Waiting for recommendations to be fetched...");
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for 3 second
+    }
+    await fetchRecommendations();
+    res.status(200).json({
+        recommendations: recommendations,
+    });
+});
+
 app.listen(port, () => console.log(`Server is running on port ${port}`));
+
+
 export const sharedData = {
     buffer: null,
     fileName: null,
-    id: null
+    id: null,
 };
 export default db;
