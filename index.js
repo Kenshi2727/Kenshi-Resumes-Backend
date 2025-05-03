@@ -414,10 +414,12 @@ app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`)
-    res.send("Server is running on port " + port);
+app.get('/', (req, res) => {
+    res.send("Server is running on port.Enjoy your day baby.......💓💓💓" + port);
 });
+
+
+app.listen(port, () => console.log(`Server is running on port ${port}`));
 
 
 export const sharedData = {
