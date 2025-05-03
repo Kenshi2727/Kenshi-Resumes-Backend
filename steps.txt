@@ -1,0 +1,29 @@
+pg_dump -U postgres -h localhost -p 5433 -d user_resume -F c -b -v -f backup.dump
+
+Explanation:
+
+-p 5433: Specifies the port your PostgreSQL 17 server is using.
+
+-d user_resume: Your actual database name.
+
+-F c: Custom format (better for pg_restore).
+
+-f backup.dump: Output file name.
+
+
+
+After Exporting, Restore It to Neon
+Once backup.dump is created, run this to push it to NeonDB:
+
+pg_restore -U neondb_owner -h ep-purple-bar-a8rb4gyu-pooler.eastus2.azure.neon.tech -p 5432 --dbname="postgresql://neondb_owner:npg_10yUxXhsGaPp@ep-purple-bar-a8rb4gyu-pooler.eastus2.azure.neon.tech/neondb?sslmode=require" --no-owner --verbose --clean backup.dump
+
+it will prompt for the password — enter:your password
+
+
+🔧 Additional Notes:
+If you're not in the folder with backup.dump, include the full path:
+C:\Users\abhis\Desktop\yourfolder\backup.dump
+
+If pg_restore is not recognized, ensure that PostgreSQL’s bin folder (where pg_restore.exe is located) is in your system’s PATH.
+
+

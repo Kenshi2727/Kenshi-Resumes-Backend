@@ -16,7 +16,7 @@ dotenv.config();
 
 // const upload = multer({ dest: 'uploads/' });//multer stores on device
 const upload = multer({ storage: multer.memoryStorage() });// multer stores in buffer
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 const db = new pg.Client({
     user: process.env.DB_USER,
