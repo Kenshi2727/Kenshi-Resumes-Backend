@@ -356,6 +356,7 @@ app.delete('/api/user-resumes/:id', async (req, res) => {
         await db.query('DELETE FROM experience WHERE "documentId" = $1', [req.params.id]);
         await db.query('DELETE FROM education WHERE "documentId" = $1', [req.params.id]);
         await db.query('DELETE FROM skills WHERE "documentId" = $1', [req.params.id]);
+        await db.query('DELETE FROM telegramusers WHERE "documentId" = $1', [req.params.id]);
         res.send("Document deleted successfully with id " + req.params.id);
     } catch (error) {
         console.log("Database deletion error----->", error);
