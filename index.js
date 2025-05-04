@@ -32,13 +32,13 @@ db.connect((err) => {
     if (err)
         console.log("Error connecting to Neon Database");
     else {
-        console.log("Conncted to Neon Database");
+        console.log("Connected to Neon Database");
         // wake up function to keep neonDB server alive
         setInterval(async () => {
             try {
-                await db.query('SELECT NOW()');//get current time from database
+                const awakeTime = await db.query('SELECT NOW()');//get current time from database
                 console.log("NeonDB is awake!");
-                console.log("Checked at:", new Date().toLocaleString());
+                console.log("Checked at:", awakeTime.rows[0].now.toLocaleString());
 
             } catch (error) {
                 console.error("Error waking up NeonDB:", error);
