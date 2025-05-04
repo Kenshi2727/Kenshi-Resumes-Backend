@@ -28,7 +28,58 @@ const db = new pg.Client({
         rejectUnauthorized: false
     }
 })
-db.connect();
+db.connect((err) => {
+    if (err)
+        console.log("Error connecting to Neon Database");
+    else {
+        console.log("Conncted to Neon Database");
+        // wake up function to keep neonDB server alive
+        setInterval(async () => {
+            try {
+                await db.query('SELECT NOW()');//get current time from database
+                console.log("NeonDB is awake!");
+                console.log("Checked at:", new Date().toLocaleString());
+
+            } catch (error) {
+                console.error("Error waking up NeonDB:", error);
+                console.error("Checked at:", new Date().toLocaleString());
+            }
+        },
+            4 * 60 * 1000);// 4 minutes
+    }
+});
+
+// db.connect();
+
+// //error event listener for database connection
+// db.on('error', (err) => {
+//     const date = new Date();
+//     const errorTime = date.toLocaleString();
+//     console.error('NeonDB went idle!');
+//     console.error('Error occurred at:', errorTime);
+//     db.end();// Close the current connection
+//     console.log("Disconnected from Neon Database");
+
+//     // Reconnect to the database
+//     db = new pg.Client({
+//         user: process.env.DB_USER,
+//         host: process.env.DB_HOST,
+//         database: process.env.DB_NAME,
+//         password: process.env.DB_PASSWORD,
+//         port: process.env.DB_PORT,
+//         ssl: {
+//             rejectUnauthorized: false
+//         }
+//     })
+
+//     db.connect();// Reconnect to the database
+
+//     const reconnectTime = date.toLocaleString();
+//     console.log("Reconnected to Neon Database");
+//     console.log("Reconnected at:", reconnectTime);
+
+// });
+
 
 app.use(cors()); // Allow cross-origin requests
 app.use(bodyParser.json());
@@ -414,8 +465,60 @@ app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
     });
 });
 
+
+
+
+
+
+
+
+//BACKEND HOME PAGE
 app.get('/', (req, res) => {
-    res.send("Server is running on port.Enjoy your day baby.......💓💓💓" + port);
+    res.send(`
+            Server is running on port ${port}.Enjoy your day baby.......💓💓💓
+            Frontend:https://kenshi-resumes-ai-powered.vercel.app/
+            deployed on vercel
+            Telegram bot: @Kenshi_Resume_Bot
+              
+            databse: postgresql
+            deployed on neonDB
+                   ======================================
+                  ========================================
+                 ==========================================
+                ============================================
+               ==============================================
+              ================================================
+             ==================================================
+            ====================================================
+            =                                                 =
+             =                                               =
+              =                                             =
+               =                                           =   
+                =                                         =
+                    =           K E N S H I           =    
+                    =                                 =
+                    =                                 =
+                        =      R E S U M E S      =
+                        =                         =
+                        =                         =
+                        =                         =
+                            =                 =
+                            =                 =
+                            =                 = 
+                            =                 =
+                            =                 =
+                            ===================
+                             =================
+                              ===============
+                               =============
+                                ===========
+                                 =========
+                                  =======
+                                   =====
+                                    ===
+                                     =
+
+            `);
 });
 
 
