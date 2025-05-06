@@ -477,48 +477,12 @@ app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
 app.get('/', (req, res) => {
     res.send(`
             Server is running on port ${port}.Enjoy your day baby.......💓💓💓
-            Frontend:https://kenshi-resumes-ai-powered.vercel.app/
-            deployed on vercel
-            Telegram bot: @Kenshi_Resume_Bot
+            \nFrontend:https://kenshi-resumes-ai-powered.vercel.app/
+            \ndeployed on vercel
+            \nTelegram bot: @Kenshi_Resume_Bot
               
-            databse: postgresql
-            deployed on neonDB
-                   ======================================
-                  ========================================
-                 ==========================================
-                ============================================
-               ==============================================
-              ================================================
-             ==================================================
-            ====================================================
-            =                                                 =
-             =                                               =
-              =                                             =
-               =                                           =   
-                =                                         =
-                    =           K E N S H I           =    
-                    =                                 =
-                    =                                 =
-                        =      R E S U M E S      =
-                        =                         =
-                        =                         =
-                        =                         =
-                            =                 =
-                            =                 =
-                            =                 = 
-                            =                 =
-                            =                 =
-                            ===================
-                             =================
-                              ===============
-                               =============
-                                ===========
-                                 =========
-                                  =======
-                                   =====
-                                    ===
-                                     =
-
+            \ndatabse: postgresql
+            \ndeployed on neonDB
             `);
 });
 
