@@ -428,7 +428,8 @@ app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async
         await db.query(`INSERT INTO telegramusers("documentId","userName",pdf,"fileName") 
                         VALUES($1,$2,$3,$4)
                         `, [req.params.id, req.params.teleUser, req.file.buffer, req.file.originalname]);
-        res.send("File uploaded successfully with id " + req.params.id);
+        res.status(200).send("File uploaded successfully with id " + req.params.id);
+        console.log("File saved to databse for tele with id " + req.params.id);
     } catch (error) {
         console.log("Database insertion error----->", error);
     }
