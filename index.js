@@ -12,8 +12,11 @@ import dotenv from 'dotenv';
 import fetchATS from './flashAI.js';
 import fetchRecommendations from './flashRecommendations.js';
 import { recommendations } from './flashRecommendations.js';
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 dotenv.config();
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 // const upload = multer({ dest: 'uploads/' });//multer stores on device
 const upload = multer({ storage: multer.memoryStorage() });// multer stores in buffer
 const port = process.env.PORT || 3000;
@@ -80,7 +83,7 @@ db.connect((err) => {
 
 // });
 
-
+app.use(express.static('public'));
 app.use(cors()); // Allow cross-origin requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -421,15 +424,21 @@ app.delete('/api/user-resumes/:id', async (req, res) => {
 app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async (req, res) => {
     console.log("Pdf post request----->", req.body);
     console.log("Pdf file----->", req.file);
-    sharedData.buffer = req.file.buffer;
-    sharedData.id = req.params.id;
-    sharedData.fileName = req.file.originalname;
     try {
-        await db.query(`INSERT INTO telegramusers("documentId","userName",pdf,"fileName") 
+        if (!req.file) {
+            console.warn("No file received:", req.body);
+            return res.status(400).json({ error: 'No file uploaded' });//400 Bad Request(client-error)
+        }
+        else {
+            await db.query(`INSERT INTO telegramusers("documentId","userName",pdf,"fileName") 
                         VALUES($1,$2,$3,$4)
                         `, [req.params.id, req.params.teleUser, req.file.buffer, req.file.originalname]);
-        res.status(200).send("File uploaded successfully with id " + req.params.id);
-        console.log("File saved to databse for tele with id " + req.params.id);
+            sharedData.buffer = req.file.buffer;
+            sharedData.id = req.params.id;
+            sharedData.fileName = req.file.originalname;
+            res.status(200).send("File uploaded successfully with id " + req.params.id);
+            console.log("File saved to databse for tele with id " + req.params.id);
+        }
     } catch (error) {
         console.log("Database insertion error----->", error);
     }
@@ -467,23 +476,9 @@ app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
 });
 
 
-
-
-
-
-
-
 //BACKEND HOME PAGE
 app.get('/', (req, res) => {
-    res.send(`
-            Server is running on port ${port}.Enjoy your day baby.......💓💓💓
-            \nFrontend:https://kenshi-resumes-ai-powered.vercel.app/
-            \ndeployed on vercel
-            \nTelegram bot: @Kenshi_Resume_Bot
-              
-            \ndatabse: postgresql
-            \ndeployed on neonDB
-            `);
+    res.sendFile(__dirname + "/public/index.html");
 });
 
 
