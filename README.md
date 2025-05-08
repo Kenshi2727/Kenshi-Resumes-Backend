@@ -95,33 +95,30 @@ A robust and scalable backend for the Kenshi Resumes application, providing API 
 
   ```json
    {
-       data: {
-       title: resumeTitle,
-       documentId: uuid,
-       userEmail: user?.primaryEmailAddress?.emailAddress,
-       userName: user?.fullName
-     }
-  }
+    "data": {
+             "title": "resumeTitle",
+             "documentId": "uuid",
+             "userEmail": "userEmail@example.com",
+             "userName": "User Full Name"
+           }
+   }
+ 
+
   
   ```
 
 **Response**:
 
   ```json
-      {
-
-     data: {
-
-       title: 'John Doe',
-
-       documentId: '**************************',
-  
-       userEmail: 'johndoe@example.com',
-
-       userName: 'John Doe'
-     }
-
+     {
+      "data": {
+               "title": "John Doe",
+               "documentId": "**************************",
+               "userEmail": "johndoe@example.com",
+               "userName": "John Doe"
+              }
     }
+
   ```
 
 * **GET** `/api/user-resumes`
