@@ -39,7 +39,7 @@ A robust and scalable backend for the Kenshi Resumes application, providing API 
 * [Node.js](https://nodejs.org/) v16 or higher
 * [PostgreSQL](https://www.postgresql.org/) v12 or higher (or a hosted DB via Railway)
 * [Railway CLI](https://railway.app/) (for deployment)
-* OpenAI API Key
+* Gemini API Key
 
 ---
 
