@@ -28,8 +28,8 @@ A robust and scalable backend for the Kenshi Resumes application, providing API 
 * **Runtime**: Node.js
 * **Framework**: Express.js
 * **Database**: PostgreSQL
-* **ORM / Query**: Native `pg` library
-* **AI Service**: OpenAI API
+* **Query**: Native `pg` library
+* **AI Service**: Gemini AI API
 * **Deployment**: Railway
 
 ---
