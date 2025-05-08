@@ -89,40 +89,53 @@ A robust and scalable backend for the Kenshi Resumes application, providing API 
 
 ### Resume Endpoints
 
-* **POST** `/api/resumes`
+* **POST** `api/user-resumes`
   Generate and save a new resume.
   **Body**:
 
   ```json
-  {
-    "name": "John Doe",
-    "experience": "3 years in software development",
-    "education": "B.Tech in Computer Science",
-    "skills": ["JavaScript", "Node.js", "SQL"]
+   {
+       data: {
+       title: resumeTitle,
+       documentId: uuid,
+       userEmail: user?.primaryEmailAddress?.emailAddress,
+       userName: user?.fullName
+     }
   }
+  
   ```
 
-  **Response**:
+**Response**:
 
   ```json
-  {
-    "id": 1,
-    "resumeText": "...AI-generated resume content..."
-  }
+      {
+
+     data: {
+
+       title: 'John Doe',
+
+       documentId: '**************************',
+  
+       userEmail: 'johndoe@example.com',
+
+       userName: 'John Doe'
+     }
+
+    }
   ```
 
-* **GET** `/api/resumes/:id`
-  Retrieve a previously generated resume by its ID.
+* **GET** `/api/user-resumes`
+  Retrieve a previously generated resume using query parametrs (req.query.userEmail).
 
 ### Flash Recommendations
 
-* **GET** `/api/recommendations?section=experience`
-  Get quick improvement tips for a specific resume section.
+* **GET** `/api/user-resumes/fetchRecommendations/:id`
+  Get quick improvement tips for your resume ATS score.
 
 ### Bot Routes (Optional)
 
-* **POST** `/bot`
-  Endpoint consumed by the Telegram bot for chat interactions.
+* **POST** `/api/user-resumes/upload/:id/:teleUser`
+  Endpoint consumed by the Telegram bot for resume delivery.
 
 ---
 
