@@ -475,6 +475,12 @@ app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
     });
 });
 
+app.post('/api/feedbacks', (req, res) => {
+    const data = req.body;
+    console.log("Feedback received----->", data);
+
+    res.status(200).send("Feedback received successfully");
+});
 
 //BACKEND HOME PAGE
 app.get('/', (req, res) => {
