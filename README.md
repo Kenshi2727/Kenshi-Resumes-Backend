@@ -6,7 +6,7 @@ A robust and scalable backend for the Kenshi Resumes application, providing API 
 
 ## 📍 Key Highlights
 
-* **AI Integration**: Leverages OpenAI to generate tailored resume content.
+* **AI Integration**: Leverages Gemini Flash 2.0 to generate tailored resume content.
 * **Express.js Framework**: Fast and minimal server setup with middleware support.
 * **PostgreSQL Database**: Reliable relational storage for resume records.
 * **Deployment**: Hosted on Railway for zero-downtime production.
