@@ -31,6 +31,8 @@ const db = new pg.Client({
         rejectUnauthorized: false
     }
 })
+
+// for production, uncomment the ssl part
 db.connect((err) => {
     if (err)
         console.log("Error connecting to Neon Database");
@@ -52,7 +54,7 @@ db.connect((err) => {
     }
 });
 
-// db.connect();
+// db.connect();//for development
 
 // //error event listener for database connection
 // db.on('error', (err) => {

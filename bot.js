@@ -41,6 +41,15 @@ bot.onText(/\/sendpdf/, async (msg, match) => {
             result.rows.forEach((row) => {
                 const pdfData = row.pdf; // Buffer of the PDF file
                 // console.log("Result from db", result);
+
+
+                if (!Buffer.isBuffer(pdfData)) {
+                    console.log("pdfData is not a buffer. Converting...");
+                    pdfData = Buffer.from(pdfData, 'binary');
+                }
+
+
+
                 bot.sendDocument(chatId, pdfData, {
                     caption: 'Here is your AI-generated Resume!',
 
