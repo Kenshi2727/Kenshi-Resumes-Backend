@@ -87,6 +87,32 @@ db.connect((err) => {
 
 app.use(express.static('public'));
 app.use(cors()); // Allow cross-origin requests
+
+
+app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async (req, res) => {
+    console.log("Pdf post request----->", req.body);
+    console.log("Pdf file----->", req.file);
+    try {
+        if (!req.file) {
+            console.warn("No file received:", req.body);
+            return res.status(400).json({ error: 'No file uploaded' });//400 Bad Request(client-error)
+        }
+        else {
+            await db.query(`INSERT INTO telegramusers("documentId","userName",pdf,"fileName") 
+                        VALUES($1,$2,$3,$4)
+                        `, [req.params.id, req.params.teleUser, req.file.buffer, req.file.originalname]);
+            sharedData.buffer = req.file.buffer;
+            sharedData.id = req.params.id;
+            sharedData.fileName = req.file.originalname;
+            res.status(200).send("File uploaded successfully with id " + req.params.id);
+            console.log("File saved to databse for tele with id " + req.params.id);
+        }
+    } catch (error) {
+        console.log("Database insertion error----->", error);
+    }
+});
+
+// declared after multer to avoid mutli-part parsing errors
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -420,29 +446,6 @@ app.delete('/api/user-resumes/:id', async (req, res) => {
     } catch (error) {
         console.log("Database deletion error----->", error);
         res.status(500).send("Error deleting data from database");
-    }
-});
-
-app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async (req, res) => {
-    console.log("Pdf post request----->", req.body);
-    console.log("Pdf file----->", req.file);
-    try {
-        if (!req.file) {
-            console.warn("No file received:", req.body);
-            return res.status(400).json({ error: 'No file uploaded' });//400 Bad Request(client-error)
-        }
-        else {
-            await db.query(`INSERT INTO telegramusers("documentId","userName",pdf,"fileName") 
-                        VALUES($1,$2,$3,$4)
-                        `, [req.params.id, req.params.teleUser, req.file.buffer, req.file.originalname]);
-            sharedData.buffer = req.file.buffer;
-            sharedData.id = req.params.id;
-            sharedData.fileName = req.file.originalname;
-            res.status(200).send("File uploaded successfully with id " + req.params.id);
-            console.log("File saved to databse for tele with id " + req.params.id);
-        }
-    } catch (error) {
-        console.log("Database insertion error----->", error);
     }
 });
 
