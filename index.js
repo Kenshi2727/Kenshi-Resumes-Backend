@@ -509,8 +509,8 @@ export const sharedData = {
 };
 
 export const feedback = [{
-    rating: 0,
-    feedback: "",
+    rating: -1,
+    feedback: "No ratings given yet!",
 }];
 
 export default db;
