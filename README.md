@@ -4,6 +4,9 @@ A robust and scalable backend for the Kenshi Resumes application, providing API 
 
 ---
 
+## Backend Panel(Snapshot)
+<img src="public/images/panel.png" />
+
 ## 📍 Key Highlights
 
 * **AI Integration**: Leverages Gemini Flash 2.0 to generate tailored resume content.
