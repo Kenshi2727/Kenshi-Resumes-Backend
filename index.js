@@ -86,7 +86,11 @@ db.connect((err) => {
 // });
 
 app.use(express.static('public'));
-app.use(cors()); // Allow cross-origin requests
+app.use(cors({
+    origin: ['https://kenshi-resumes-ai-powered.vercel.app'], // replace with your actual frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    //   credentials: true, // if using cookies/auth headers
+})); // Allow cross-origin requests
 
 
 app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async (req, res) => {
