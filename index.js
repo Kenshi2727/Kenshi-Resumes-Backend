@@ -483,8 +483,14 @@ app.get('/api/user-resumes/fetchRecommendations/:id', async (req, res) => {
 app.post('/api/feedbacks', (req, res) => {
     const data = req.body;
     console.log("Feedback received----->", data);
-
+    if (data) {
+        feedback.push(data);
+    }
     res.status(200).send("Feedback received successfully");
+});
+
+app.get('/api/feedbacks', (req, res) => {
+    res.json(feedback);  // send the current array
 });
 
 //BACKEND HOME PAGE
@@ -501,4 +507,10 @@ export const sharedData = {
     fileName: null,
     id: null,
 };
+
+export const feedback = [{
+    rating: 0,
+    feedback: "",
+}];
+
 export default db;

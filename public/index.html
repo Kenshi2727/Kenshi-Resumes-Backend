@@ -12,6 +12,14 @@
     <!-- Feedback Panel -->
     <div class="panel feedback-panel" id="feedback-container">
       <h2>Client Feedback</h2>
+
+        <!-- Feedback Summary -->
+    <div class="feedback-summary" id="feedback-summary">
+        <div class="indicator positive">Positive: 0</div>
+        <div class="indicator medium">Medium: 0</div>
+        <div class="indicator negative">Negative: 0</div>
+    </div>
+
       <!-- One sample will exist initially -->
       <div class="feedback-item">
         <div class="feedback-rating">Rating: ⭐⭐⭐</div>
@@ -36,27 +44,60 @@
     </div>
   </div>
 
-  <!-- JS to add more feedback -->
-  <script>
-    const feedbackData = [
-      { rating: 5, feedback: "Fantastic service!" },
-      { rating: 4, feedback: "Easy to use and quick." },
-      { rating: 2, feedback: "Needs improvement in PDF export." },
-      { rating: 3, feedback: "Nice, but still buggy in places." }
-    ];
 
+  <!-- JS to add more feedback -->
+    <!-- remove the <script type="module"> import… block entirely -->
+
+  <script>
     const container = document.getElementById('feedback-container');
 
-    feedbackData.forEach(({ rating, feedback }) => {
-      const item = document.createElement('div');
-      item.className = 'feedback-item';
-      item.innerHTML = `
-        <div class="feedback-rating">Rating: ${'⭐'.repeat(rating)}</div>
-        <div class="feedback-message">"${feedback}"</div>
-      `;
-      container.appendChild(item);
-    });
+    // First, clear the sample
+    container.querySelector('.feedback-item').remove();
+
+    let positiveCount = 0;
+    let mediumCount = 0;
+    let negativeCount = 0;
+
+    fetch('/api/feedbacks')
+      .then(res => res.json())
+      .then(feedbackData => {
+        // Optional: trim to latest 20
+        if (feedbackData.length > 20) {
+          feedbackData = feedbackData.slice(-20);
+        }
+
+        feedbackData.forEach(({ rating, feedback }) => {
+          const item = document.createElement('div');
+          item.className = 'feedback-item';
+          item.innerHTML = `
+            <div class="feedback-rating">Rating: ${'⭐'.repeat(rating)}</div>
+            <div class="feedback-message">"${feedback}"</div>
+          `;
+          container.appendChild(item);
+
+          if(rating < 3) {
+            item.style.backgroundColor = '#ffcccc'; // for low ratings
+            negativeCount++;
+          } else if (rating < 4) {
+            item.style.backgroundColor = '#ffffcc'; // for medium ratings
+            mediumCount++;
+          } else {
+            item.style.backgroundColor = '#ccffcc'; // for high ratings
+            positiveCount++;
+          }
+        });
+
+        // Update counts
+        document.querySelector('.indicator.positive').textContent = `Positive: ${positiveCount}`;
+        document.querySelector('.indicator.medium').textContent = `Medium: ${mediumCount}`;
+        document.querySelector('.indicator.negative').textContent = `Negative: ${negativeCount}`;
+
+
+        setInterval(()=>window.location.reload(), 15000); // Refresh every 15 seconds
+      })
+      .catch(err => console.error('Could not load feedback:', err));
   </script>
+
 
 </body>
 </html>

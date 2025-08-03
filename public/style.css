@@ -1,9 +1,10 @@
 body{
     background-image: url('/images/backendHome.jpg');
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
   * {
@@ -12,14 +13,14 @@ body{
       box-sizing: border-box;
     }
 
-    body {
+    /* body {
       font-family: Arial, sans-serif;
       background-color: #f2f2f2;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-    }
+    } */
 
     .main-wrapper {
       display: flex;
@@ -40,6 +41,12 @@ body{
       flex-direction: column;
       overflow-y: auto;
       max-height: 80vh;
+      margin: 2rem 0;
+    }
+
+    .feedback-panel {
+      background-color: #F4F0FA;
+      margin-top: 2rem;
     }
 
     .feedback-panel h2 {
@@ -76,3 +83,51 @@ body{
     .mid-container li {
       margin-bottom: 0.5rem;
     }
+
+    .feedback-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background-color: #f0f4f8;
+}
+
+.indicator {
+  padding: 0.4rem 0.6rem;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.indicator.positive {
+  background-color: #ccffcc; /* light green */
+}
+
+.indicator.medium {
+  background-color: #ffffcc; /* light yellow */
+}
+
+.indicator.negative {
+  background-color: #ffcccc; /* light red */
+}
+
+
+
+@media (max-width: 860px) {
+  .main-wrapper {
+    flex-direction: column;
+    align-items: center; /* Optional: center the panels horizontally */
+  }
+
+  .panel {
+    width: 100%; /* Full width on smaller screens */
+    max-width: 600px; /* Optional: keep it from being too wide */
+  }
+  
+  body{
+    align-items: normal;
+  }
+}
+
