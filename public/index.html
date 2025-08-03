@@ -1,27 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Kenshi Resumes Backend</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kenshi Resumes Backend</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div>
-        <div class="mid-container">
-            <h1 class="title">Kenshi Resumes Backend</h1>
-            <p class="description">Welcome to the Kenshi Resumes Backend!</p>
-        
-        <p>This is a backend service for managing Kenshi Resumes.</p>
-        <p>Links:</p>
-        <ul>
-            <li><a href="https://kenshi-resumes-ai-powered.vercel.app/">Frontend</a></li>
-            <li><a href="https://t.me/resume2727bot">Kenshi Resumes Bot</a></li>
-            <li><a href="https://github.com/Kenshi2727/Kenshi-Resumes-Backend">Backend Repository</a></li>
-            <li><a href="https://console.neon.tech/app/projects/billowing-sound-45472486">NeonDB Postgres Database Deployment</a></li>
-        </ul>
-        <p>Contact: <a href="mailto:abhishekmathurofficial@gmail.com">Developer Mail</a>
+
+  <div class="main-wrapper">
+    <!-- Feedback Panel -->
+    <div class="panel feedback-panel" id="feedback-container">
+      <h2>Client Feedback</h2>
+      <!-- One sample will exist initially -->
+      <div class="feedback-item">
+        <div class="feedback-rating">Rating: ⭐⭐⭐</div>
+        <div class="feedback-message">"Good"</div>
+      </div>
     </div>
-</div>
+
+    <!-- Main Content Panel -->
+    <div class="panel mid-container">
+      <h1 class="title">Kenshi Resumes Backend</h1>
+      <p class="description">Welcome to the Kenshi Resumes Backend!</p>
+
+      <p>This is a backend service for managing Kenshi Resumes.</p>
+      <p>Links:</p>
+      <ul>
+        <li><a href="https://kenshi-resumes-ai-powered.vercel.app/">Frontend</a></li>
+        <li><a href="https://t.me/resume2727bot">Kenshi Resumes Bot</a></li>
+        <li><a href="https://github.com/Kenshi2727/Kenshi-Resumes-Backend">Backend Repository</a></li>
+        <li><a href="https://console.neon.tech/app/projects/billowing-sound-45472486">NeonDB Postgres Database Deployment</a></li>
+      </ul>
+      <p>Contact: <a href="mailto:abhishekmathurofficial@gmail.com">Developer Mail</a></p>
+    </div>
+  </div>
+
+  <!-- JS to add more feedback -->
+  <script>
+    const feedbackData = [
+      { rating: 5, feedback: "Fantastic service!" },
+      { rating: 4, feedback: "Easy to use and quick." },
+      { rating: 2, feedback: "Needs improvement in PDF export." },
+      { rating: 3, feedback: "Nice, but still buggy in places." }
+    ];
+
+    const container = document.getElementById('feedback-container');
+
+    feedbackData.forEach(({ rating, feedback }) => {
+      const item = document.createElement('div');
+      item.className = 'feedback-item';
+      item.innerHTML = `
+        <div class="feedback-rating">Rating: ${'⭐'.repeat(rating)}</div>
+        <div class="feedback-message">"${feedback}"</div>
+      `;
+      container.appendChild(item);
+    });
+  </script>
+
 </body>
 </html>

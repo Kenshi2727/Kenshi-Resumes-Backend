@@ -15,7 +15,7 @@ async function main() {
     else {
         const contents = [
             {
-                text: "Give recommendations to improve this resumme's ATS Scores."
+                text: "Give recommendations to improve this resume's ATS Scores."
             },
             {
                 inlineData: {
