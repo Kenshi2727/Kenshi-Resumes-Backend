@@ -30,7 +30,16 @@ async function main() {
             contents: contents
         });
         console.log(response.text);
-        recommendations = response.text;
+        recommendations = response.text
+            // Optional: uppercase headers like **PROFESSIONAL TITLE**
+            .replace(/\*\*(.*?)\*\*/g, (_, text) => text.toUpperCase())
+            // Optional: make *italic* to _italic_ or leave as-is
+            .replace(/\*(.*?)\*/g, (_, text) => text)
+            // Normalize spacing
+            .replace(/\r?\n{2,}/g, '\n\n')
+            // Clean up stray Markdown characters
+            .replace(/[`#_>~]/g, '')
+            .trim();                                // Normalize spacing
     }
 }
 
