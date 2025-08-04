@@ -85,15 +85,18 @@ db.connect((err) => {
 
 // });
 
-app.use(express.static('public'));
+
 app.use(cors({
     origin: ['https://kenshi-resumes-ai-powered.vercel.app'], // replace with your actual frontend domain
+    // origin: 'http://localhost:5173', // origins for development
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     //   credentials: true, // if using cookies/auth headers
 })); // Allow cross-origin requests
 
 app.options('*', cors()); // Enable preflight for all routes
+
+app.use(express.static('public'));// do not place above cors, cors will not work
 
 app.post('/api/user-resumes/upload/:id/:teleUser', upload.single('files'), async (req, res) => {
     console.log("Pdf post request----->", req.body);
@@ -503,6 +506,7 @@ app.get('/api/feedbacks', (req, res) => {
 app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
+
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
