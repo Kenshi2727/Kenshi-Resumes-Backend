@@ -87,7 +87,7 @@ db.connect((err) => {
 
 
 app.use(cors({
-    origin: ['https://kenshi-resumes-ai-powered.vercel.app'], // replace with your actual frontend domain
+    origin: ['https://kenshi-resumes-ai-powered.vercel.app'],
     // origin: 'http://localhost:5173', // origins for development
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
