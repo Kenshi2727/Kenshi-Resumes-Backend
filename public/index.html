@@ -78,7 +78,7 @@
           const item = document.createElement('div');
           item.className = 'feedback-item';
           item.innerHTML = `
-            <div class="feedback-rating">Rating: ${'⭐'.repeat(rating>1?rating:0)}</div>
+            <div class="feedback-rating">Rating: ${'⭐'.repeat(rating>=1?rating:0)}</div>
             <div class="feedback-message">"${feedback}"</div>
           `;
           container.appendChild(item);
